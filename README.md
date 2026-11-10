@@ -9,8 +9,8 @@ Research implementation of the functional product Dirichlet process mixture (fPD
 | `PDPM_Main.R` | Command-line entry point for fitting the model and saving posterior draws. |
 | `Code/PDPM_dwt2d_LRD_func.R` | MCMC implementation, including the `fPDPM_mcmc()` function and supporting updates. |
 | `Code/dmv_LRD_woodbury.cpp` | RcppArmadillo routine for a multivariate Gaussian log density with covariance `W W^T + s² I`, using the Woodbury identity. |
-| `gwkConv.R` | Reconstructs the wavelet mean component for posterior draws and calculates location-wise Geweke diagnostics. |
-| `postSummary_hclust.R` | Constructs posterior pairwise dissimilarities from local cluster memberships and performs hierarchical clustering. |
+| `Code/gwkConv.R` | Reconstructs the wavelet mean component for posterior draws and calculates location-wise Geweke diagnostics. |
+| `Code/postSummary_hclust.R` | Constructs posterior pairwise dissimilarities from local cluster memberships and performs hierarchical clustering. |
 
 ## Requirements
 
@@ -72,9 +72,7 @@ Rscript gwkConv.R example 3
 
 The script reconstructs the **wavelet mean component** from posterior cluster memberships and coefficients, selects every third retained draw, and computes Geweke Z-statistics for each observation and spatial location using `coda::geweke.diag()`. It converts each Z-statistic to a two-sided p-value using `2 * (1 - pnorm(abs(z)))`, applies Benjamini–Hochberg adjustment **within each observation across spatial locations**, and prints a summary of the proportion of adjusted p-values greater than 0.05.
 
-This is a descriptive diagnostic, not a formal guarantee of MCMC convergence. Mixing can depend on the observed dataset; inspection of likelihood traces and additional chains is recommended.
-
-**Current settings:** `gwkConv.R` hard-codes `nLoc = 32`, `nSmp = 300`, and `thinIn = 3`. Adapt these before analyzing other dimensions or sample sizes. The reconstructed wavelet mean component does not include the low-rank residual factor term.
+**Current settings:** `gwkConv.R` hard-codes `nLoc = 32`, `nSmp = 300`, and `thinIn = 3`. Adapt these before analyzing other dimensions or sample sizes. 
 
 ## Pairwise dissimilarities and hierarchical clustering
 
@@ -82,7 +80,7 @@ This is a descriptive diagnostic, not a formal guarantee of MCMC convergence. Mi
 Rscript postSummary_hclust.R example 3
 ```
 
-For each selected retained draw, the script computes pairwise dissimilarities based on agreement of local cluster memberships, excluding the final residual-covariance membership column. Each wavelet resolution has a specified weight, shared by its LH, HL, and HH detail subbands; the resolution weights include the sample-size-dependent adjustment defined in the code and manuscript. Pairwise dissimilarities are averaged across draws, then passed to `hclust()`. The number of clusters is selected by maximizing average silhouette width over `k = 2, ..., 30`.
+For each retained posterior samples, the script computes pairwise dissimilarities based on agreement of local cluster memberships, excluding the final residual-covariance membership column. Each wavelet resolution has a specified weight. The resolution weights include the sample-size-dependent adjustment defined in the code and manuscript. Pairwise dissimilarities are averaged across draws, then passed to `hclust()`. The number of clusters is selected by maximizing average silhouette width over `k = 2, ..., 30`.
 
 The script saves the per-draw dissimilarity array to `MCMC_Res/pairDist_<dataset>_Kmax<K>.RDS`, and plots the resulting dendrogram. Cluster assignments are calculated with `cutree()` but are not currently written to a file.
 
@@ -92,7 +90,7 @@ The script saves the per-draw dissimilarity array to `MCMC_Res/pairDist_<dataset
 
 - The scripts are provided as research code, not as a packaged R library.
 - Model-fitting runtime and MCMC mixing depend on the dataset and computational environment.
-- Only post-burn-in samples are stored; with the supplied 3,000 iterations and 90% burn-in, 300 draws are retained. Thinning every third draw in the post-processing scripts selects 100 draws.
+- Only post-burn-in samples are stored. 
 - No dataset or precomputed results are included; create the required directories and supply your own data.
 - This repository has not been end-to-end tested in the current environment.
 
