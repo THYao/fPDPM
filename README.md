@@ -170,7 +170,8 @@ The script saves the per-draw dissimilarity array to `MCMC_Res/pairDist_<dataset
 - The scripts are provided as research code, not as a packaged R library.
 - Model-fitting runtime and MCMC mixing depend on the dataset and computational environment.
 - Only post-burn-in samples are stored. 
-- No dataset or precomputed results are included; create the required directories and supply your own data.
+- An example simulated dataset is provided in `Data/`. Users can also supply their own data following the specified input format.
+- Precomputed MCMC results are not included. Create the `MCMC_Res/` directory before running the scripts.
 - This repository has not been end-to-end tested in the current environment.
 
 ## Citation and license
