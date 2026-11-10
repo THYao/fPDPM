@@ -40,6 +40,29 @@ Here `obsDf` is a numeric array of dimensions **spatial row × spatial column ×
 
 **Important:** The three command-line R scripts contain `setwd("~/fPDPM/")`. Change that path to the local repository directory (or remove it and launch the scripts from the repository root) before running them.
 
+## Simulated data
+
+We provide the simulated dataset
+[`diagErr_highSNR_nLoc32_nSmp300_b3.RDS`](https://github.com/THYao/fPDPM/blob/main/Data/diagErr_highSNR_nLoc32_nSmp300_b3.RDS)
+to demonstrate the fPDPM implementation.
+
+It contains **300 simulated observations on a 32 × 32 spatial grid**,
+under a high signal-to-noise ratio setting with diagonal residual errors.
+
+Load the dataset in R:
+
+```r
+obsDf <- readRDS("./Data/diagErr_highSNR_nLoc32_nSmp300_b3.RDS")$df
+
+dim(obsDf)
+# [1] 32 32 300
+```
+
+The supplied scripts can be run with the dataset name
+`diagErr_highSNR_nLoc32_nSmp300_b3` and a chosen maximum factor
+dimension (for example, `3`).
+
+
 ## Fit the model
 
 ```bash
