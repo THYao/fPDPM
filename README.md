@@ -63,29 +63,85 @@ The supplied scripts can be run with the dataset name
 dimension (for example, `3`).
 
 
+
 ## Fit the model
 
+The main MCMC function, `fPDPM_mcmc()`, is implemented in `Code/PDPM_dwt2d_LRD_func.R`. The script `PDPM_Main.R` provides an example workflow for fitting the model and saving the results.
+
+### Running the example
+
+We provide a simulated dataset,
+[`diagErr_highSNR_nLoc32_nSmp300_b3.RDS`](https://github.com/THYao/fPDPM/blob/main/Data/diagErr_highSNR_nLoc32_nSmp300_b3.RDS),
+containing 300 functional observations on a 32 × 32 spatial grid.
+
+From the repository root directory, run:
+
 ```bash
-Rscript PDPM_Main.R example 3
+Rscript PDPM_Main.R diagErr_highSNR_nLoc32_nSmp300_b3 3
 ```
 
-The first argument is the dataset filename without `.RDS`; the second is `K.max`, the maximum number of low-rank factors. The supplied script uses 3,000 iterations, 2,700 burn-in iterations, the Haar wavelet, `KcutOff = 0.7`, `K.tol = 0.1`, and `saveCov = FALSE`. It saves:
+The two command-line arguments are:
 
-```text
-MCMC_Res/example_Kmax3.RDS
-```
+1. `dfName`: Dataset filename without the `.RDS` extension.
+2. `K_max`: Maximum number of factors in the low-rank covariance representation.
 
-The saved object has elements `t` (elapsed time) and `res` (MCMC results). The main model interface is:
+Alternatively, the model can be fitted directly in R:
 
 ```r
-fPDPM_mcmc(
-  obsDf, iteNum, burnIn, seed_ = 1, wf_,
-  K.max = NULL, KcutOff = NULL, K.tol = 1e-1,
-  init.nClu = 3, hyperAlpha = 3, saveCov = TRUE
+source("./Code/PDPM_dwt2d_LRD_func.R")
+
+obsDf <- readRDS("./Data/diagErr_highSNR_nLoc32_nSmp300_b3.RDS")$df
+
+iteNum <- 3000
+burnIn <- 2700
+K_max <- 3
+seed_ <- iteNum + K_max * 12
+
+fit <- fPDPM_mcmc(
+  obsDf = obsDf,
+  iteNum = iteNum,
+  burnIn = burnIn,
+  wf_ = "haar",
+  seed_ = seed_,
+  K.max = K_max,
+  KcutOff = 0.7,
+  K.tol = 1e-1,
+  saveCov = FALSE
 )
 ```
 
-The returned list includes `initClu`, `llh`, `clu`, `coef`, `LRD`, and `var`. `clu` has dimensions **observation × membership component × retained iteration**. The final membership column corresponds to the residual covariance/variance component; the other columns correspond to the three detail subbands (LH, HL, HH) at each wavelet resolution. When `saveCov = FALSE`, low-rank covariance draws are not retained.
+The example runs 3,000 MCMC iterations, discards the first 2,700 as burn-in, and retains 300 posterior draws.
+
+The implementation uses a two-dimensional discrete wavelet transform and a low-rank representation of the residual covariance. The number of factors is adaptively updated during MCMC.
+
+**Note:** The provided `PDPM_Main.R` script uses the working directory `~/fPDPM/`. Update the `setwd()` statement to match your local repository location before running the script. Create an `MCMC_Res/` directory to store the results.
+
+### MCMC output
+
+The function `fPDPM_mcmc()` returns an R list containing:
+
+| Component | Description |
+|---|---|
+| `initClu` | Initial cluster memberships |
+| `llh` | Log-likelihood trace across all MCMC iterations |
+| `clu` | Posterior cluster membership samples |
+| `coef` | Posterior wavelet coefficient samples |
+| `LRD` | Low-rank covariance parameters, if `saveCov = TRUE` |
+| `var` | Posterior residual variance samples |
+
+The main script saves the results as:
+
+```text
+MCMC_Res/<dfName>_Kmax<K_max>.RDS
+```
+
+The saved RDS object contains the MCMC execution time (`t`)
+and fitted model results (`res`).
+
+Posterior samples in `clu`, `coef`, and `var` are retained
+only after burn-in. The log-likelihood trace (`llh`) includes
+all iterations.
+
 
 ## Posterior mean component and Geweke diagnostics
 
