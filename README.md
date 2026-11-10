@@ -6,11 +6,11 @@ Research implementation of the functional product Dirichlet process mixture (fPD
 
 | File | Description |
 | --- | --- |
-| `Code/PDPM_Main.R` | Command-line entry point for fitting the model and saving posterior draws. |
+| `PDPM_Main.R` | Command-line entry point for fitting the model and saving posterior draws. |
 | `Code/PDPM_dwt2d_LRD_func.R` | MCMC implementation, including the `fPDPM_mcmc()` function and supporting updates. |
 | `Code/dmv_LRD_woodbury.cpp` | RcppArmadillo routine for a multivariate Gaussian log density with covariance `W W^T + s² I`, using the Woodbury identity. |
-| `Code/gwkConv.R` | Reconstructs the wavelet mean component for posterior draws and calculates location-wise Geweke diagnostics. |
-| `Code/postSummary_hclust.R` | Constructs posterior pairwise dissimilarities from local cluster memberships and performs hierarchical clustering. |
+| `gwkConv.R` | Reconstructs the wavelet mean component for posterior draws and calculates location-wise Geweke diagnostics. |
+| `postSummary_hclust.R` | Constructs posterior pairwise dissimilarities from local cluster memberships and performs hierarchical clustering. |
 
 ## Requirements
 
@@ -66,7 +66,7 @@ dimension (for example, `3`).
 
 ## Fit the model
 
-The main MCMC function, `fPDPM_mcmc()`, is implemented in `Code/PDPM_dwt2d_LRD_func.R`. The script `Code/PDPM_Main.R` provides an example workflow for fitting the model and saving the results.
+The main MCMC function, `fPDPM_mcmc()`, is implemented in `Code/PDPM_dwt2d_LRD_func.R`. The script `PDPM_Main.R` provides an example workflow for fitting the model and saving the results.
 
 ### Running the example
 
@@ -114,7 +114,7 @@ The example runs 3,000 MCMC iterations, discards the first 2,700 as burn-in, and
 
 The implementation uses a two-dimensional discrete wavelet transform and a low-rank representation of the residual covariance. The number of factors is adaptively updated during MCMC.
 
-**Note:** The provided `Code/PDPM_Main.R` script uses the working directory `~/fPDPM/`. Update the `setwd()` statement to match your local repository location before running the script. Create an `MCMC_Res/` directory to store the results.
+**Note:** The provided `PDPM_Main.R` script uses the working directory `~/fPDPM/`. Update the `setwd()` statement to match your local repository location before running the script. Create an `MCMC_Res/` directory to store the results.
 
 ### MCMC output
 
@@ -151,7 +151,7 @@ Rscript gwkConv.R diagErr_highSNR_nLoc32_nSmp300_b3 3
 
 The script reconstructs the **wavelet mean component** from posterior cluster memberships and coefficients, selects every third retained draw, and computes Geweke Z-statistics for each observation and spatial location using `coda::geweke.diag()`. It converts each Z-statistic to a two-sided p-value using `2 * (1 - pnorm(abs(z)))`, applies Benjamini–Hochberg adjustment **within each observation across spatial locations**, and prints a summary of the proportion of adjusted p-values greater than 0.05.
 
-**Current settings:** `Code/gwkConv.R` hard-codes `nLoc = 32`, `nSmp = 300`, and `thinIn = 3`. Adapt these before analyzing other dimensions or sample sizes. 
+**Current settings:** `gwkConv.R` hard-codes `nLoc = 32`, `nSmp = 300`, and `thinIn = 3`. Adapt these before analyzing other dimensions or sample sizes. 
 
 ## Pairwise dissimilarities and hierarchical clustering
 
@@ -163,7 +163,7 @@ For each retained posterior samples, the script computes pairwise dissimilaritie
 
 The script saves the per-draw dissimilarity array to `MCMC_Res/pairDist_<dataset>_Kmax<K>.RDS`, and plots the resulting dendrogram. Cluster assignments are calculated with `cutree()` but are not currently written to a file.
 
-**Current settings:** `Code/postSummary_hclust.R` hard-codes `nLoc = 32`, `nSmp = 300`, and `thinIn = 3`. Its `k` search up to 30 also assumes enough observations. Adapt these settings for other datasets.
+**Current settings:** `postSummary_hclust.R` hard-codes `nLoc = 32`, `nSmp = 300`, and `thinIn = 3`. Its `k` search up to 30 also assumes enough observations. Adapt these settings for other datasets.
 
 ## Notes on reproducibility
 
