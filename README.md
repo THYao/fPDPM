@@ -58,10 +58,20 @@ dim(obsDf)
 # [1] 32 32 300
 ```
 
-The supplied scripts can be run with the dataset name
-`diagErr_highSNR` and a chosen maximum factor
-dimension (for example, `3`).
+Alternatively, the dataset can be downloaded directly from GitHub:
 
+```r
+url <- paste0("https://github.com/THYao/fPDPM/main/","Data/diagErr_highSNR.RDS")
+download.file(
+  url,
+  destfile = "diagErr_highSNR.RDS",
+  mode = "wb"
+)
+
+obsDf <- readRDS("diagErr_highSNR.RDS")
+```
+
+The supplied scripts can be run with the dataset name `diagErr_highSNR` and a chosen maximum factor dimension (for example, `3`).
 
 
 ## Fit the model
