@@ -9,7 +9,7 @@ print(args)
 dfName<-trimws(args[1])
 K_max<-as.integer(args[2])
 
-obsDf<-readRDS(file=paste0("./Data/",dfName,".RDS"))$df
+obsDf<-readRDS(file=paste0("./Data/",dfName,".RDS"))
 
 iteNum<-3000
 burnIn<-iteNum*0.9
