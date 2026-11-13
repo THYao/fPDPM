@@ -16,10 +16,11 @@ dist_cluVec<-function(cluVec1, cluVec2, wtVec=NULL){
 }
 
 args <- commandArgs(TRUE)
-# args<- c("diagErr_highSNR","3")
+# args<- c("diagErr_highSNR","3","1")
 print(args)
 dfName<-trimws(args[1])
 K_max<-as.integer(args[2])
+chIdx<-as.integer(args[3])
 nLoc<-32
 nSmp<-300
 
@@ -27,7 +28,7 @@ nJ<-log(nLoc,base = 2)
 thinIn<-3
 
 f.path<-"./MCMC_Res/"
-f.name<-paste0(dfName,"_Kmax",K_max,".RDS")
+f.name<-paste0(dfName,"_Kmax",K_max,"_ch",chIdx,".RDS")
 fpdpm<-readRDS(paste0(f.path,f.name))
 fpdpm.clu<-fpdpm$res$clu
 rm(fpdpm)
