@@ -43,7 +43,7 @@ nLoc<-32
 nSmp<-300
 thinIn<-3
 f.path<-"./MCMC_Res/"
-paste0(dfName,"_Kmax",K_max,"_ch",chIdx,".RDS")
+f.name<-paste0(dfName,"_Kmax",K_max,"_ch",chIdx,".RDS")
 fpdpm.fit<-readRDS(file=paste0(f.path,f.name))$res
 fpdpm.clu<-fpdpm.fit$clu
 n_pstNum<-dim(fpdpm.clu)[3]
