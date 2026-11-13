@@ -6,7 +6,7 @@ library(coda)
 setwd("~/fPDPM/")
 
 args <- commandArgs(TRUE)
-# args<- c("diagErr_highSNR_nLoc32_nSmp300_b3","3","1")
+# args<- c("diagErr_highSNR","3","1")
 print(args)
 dfName<-trimws(args[1])
 K_max<-as.integer(args[2])
