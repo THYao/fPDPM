@@ -77,7 +77,7 @@ containing 300 functional observations on a 32 × 32 spatial grid.
 From the repository root directory, run:
 
 ```bash
-Rscript PDPM_Main.R diagErr_highSNR 3
+Rscript PDPM_Main.R diagErr_highSNR 3 1
 ```
 
 The two command-line arguments are:
@@ -146,7 +146,7 @@ all iterations.
 ## Posterior mean component and Geweke diagnostics
 
 ```bash
-Rscript gwkConv.R diagErr_highSNR 3
+Rscript gwkConv.R diagErr_highSNR 3 1
 ```
 
 The script reconstructs the **wavelet mean component** from posterior cluster memberships and coefficients, selects every third retained draw, and computes Geweke Z-statistics for each observation and spatial location using `coda::geweke.diag()`. It converts each Z-statistic to a two-sided p-value using `2 * (1 - pnorm(abs(z)))`, applies Benjamini–Hochberg adjustment **within each observation across spatial locations**, and prints a summary of the proportion of adjusted p-values greater than 0.05.
@@ -156,7 +156,7 @@ The script reconstructs the **wavelet mean component** from posterior cluster me
 ## Pairwise dissimilarities and hierarchical clustering
 
 ```bash
-Rscript postSummary_hclust.R diagErr_highSNR 3
+Rscript postSummary_hclust.R diagErr_highSNR 3 1
 ```
 
 For each retained posterior samples, the script computes pairwise dissimilarities based on agreement of local cluster memberships, excluding the final residual-covariance membership column. Each wavelet resolution has a specified weight. The resolution weights include the sample-size-dependent adjustment defined in the code and manuscript. Pairwise dissimilarities are averaged across draws, then passed to `hclust()`. The number of clusters is selected by maximizing average silhouette width over `k = 2, ..., 30`.
