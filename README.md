@@ -33,7 +33,7 @@ Compiling the C++ helper requires a working C++ toolchain and compatible linear-
 Create `Data/` and `MCMC_Res/` under the repository root. The input should be saved as `Data/<dataset>.RDS` and contain a list with an element named `df`:
 
 ```r
-saveRDS(list(df = obsDf), "Data/example.RDS")
+saveRDS(obsDf, "Data/example.RDS")
 ```
 
 Here `obsDf` is a numeric array of dimensions **spatial row × spatial column × observation**. The current implementation assumes a square, power-of-two spatial grid for its 2D wavelet decomposition. 
@@ -52,7 +52,7 @@ under a high signal-to-noise ratio setting with diagonal residual errors.
 Load the dataset in R:
 
 ```r
-obsDf <- readRDS("./Data/diagErr_highSNR.RDS")$df
+obsDf <- readRDS("./Data/diagErr_highSNR.RDS")
 
 dim(obsDf)
 # [1] 32 32 300
@@ -90,7 +90,7 @@ Alternatively, the model can be fitted directly in R:
 ```r
 source("./Code/PDPM_dwt2d_LRD_func.R")
 
-obsDf <- readRDS("./Data/diagErr_highSNR.RDS")$df
+obsDf <- readRDS("./Data/diagErr_highSNR.RDS")
 
 iteNum <- 3000
 burnIn <- 2700
