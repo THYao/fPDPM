@@ -140,7 +140,7 @@ The objects `clu`, `coef`, and `var` contain **post-burn-in** draws only. The nu
 The cluster-specific coefficients and variance parameters are **not themselves** the observation-specific trajectories used for convergence diagnostics. At each retained iteration `t`:
 
 - For the wavelet mean component, use each observation's cluster assignments in the wavelet blocks to select the corresponding rows of `fit$coef[[t]]`; apply the inverse 2D wavelet transform to obtain the reconstructed function, denoted here by `theta_i(v)`.
-- For the variance component, use the **last** column of the assignment matrix to select the variance assigned to each observation from `fit$var[[t]]`. Thus the observation-specific draw is `sigma2_i(t) = fit$var[[t]][s_i(t)]`.
+- For the variance component, use the **last** column of the assignment matrix to select the variance assigned to each observation from `fit$var[[t]]`. Thus the observation-specific draw is `sigma2_i(t) = fit$var[[t]][h_is(t)]`.
 
 These observation-specific quantities are invariant to permutations of the component labels when the assignments and component parameters are permuted together.
 
