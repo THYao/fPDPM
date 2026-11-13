@@ -36,7 +36,7 @@ Compiling the C++ helper requires a working C++ toolchain and compatible linear-
 
 ## Input data and directory setup
 
-Create `Data/` and `MCMC_Res/` under the repository root. The input should be saved as `Data/<dataset>.RDS` and contain a list with an element named `df`:
+Create `Data/` and `MCMC_Res/` under the repository root. The input should be saved as `Data/<dataset>.RDS`:
 
 ```r
 saveRDS(obsDf, "Data/example.RDS")
