@@ -6,10 +6,11 @@ library(coda)
 setwd("~/fPDPM/")
 
 args <- commandArgs(TRUE)
-# args<- c("diagErr_highSNR_nLoc32_nSmp300_b3","1")
+# args<- c("diagErr_highSNR_nLoc32_nSmp300_b3","3","1")
 print(args)
 dfName<-trimws(args[1])
 K_max<-as.integer(args[2])
+chIdx<-as.integer(args[3])
 
 pdpm_muMat<-function(cluMat_, coefLs, wf_="haar"){
   n_<-nrow(cluMat_)
@@ -42,7 +43,7 @@ nLoc<-32
 nSmp<-300
 thinIn<-3
 f.path<-"./MCMC_Res/"
-f.name<-paste0(dfName,"_Kmax",K_max,".RDS")
+paste0(dfName,"_Kmax",K_max,"_ch",chIdx,".RDS")
 fpdpm.fit<-readRDS(file=paste0(f.path,f.name))$res
 fpdpm.clu<-fpdpm.fit$clu
 n_pstNum<-dim(fpdpm.clu)[3]
