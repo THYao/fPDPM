@@ -16,7 +16,7 @@ dist_cluVec<-function(cluVec1, cluVec2, wtVec=NULL){
 }
 
 args <- commandArgs(TRUE)
-# args<- c("diagErr_highSNR_nLoc32_nSmp300_b3","3")
+# args<- c("diagErr_highSNR","3")
 print(args)
 dfName<-trimws(args[1])
 K_max<-as.integer(args[2])
